@@ -7,6 +7,8 @@
 #define _BONEZEGEI_SSD1306_H_
 #include <Arduino.h>
 #include <Wire.h>
+#include "arial8.h"
+
 #define SSD1306_ADDRESS_W 0x3C
 #define SSD1306_CMD_MODE 0x80
 #define SSD1306_DATA_MODE 0x40
@@ -22,9 +24,20 @@ public:
   void draw();
   void drawPixel(uint8_t x, uint8_t y, uint8_t pixel);
 
+  void drawFilledRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
+  void drawFilledRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2,uint8_t pixel);
+
+  void setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color);
+  void drawChar(int x, int y, char ch, uint8_t color, const char fd[], const int dsc[95][3]);
+  void drawText(int x, int y, const char *str, uint8_t color, const char fd[], const int dsc[95][3]);
+
+
   unsigned char RAM[1024];
   uint16_t width;
   uint16_t height;
+
+  int xRun;
+  int yRun;
 };
 
 #endif
