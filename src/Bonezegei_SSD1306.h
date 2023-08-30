@@ -27,10 +27,15 @@ public:
   void drawFilledRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
   void drawFilledRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2,uint8_t pixel);
 
+  //draw text Fast skips 0
   void setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color);
   void drawChar(int x, int y, char ch, uint8_t color, const char fd[], const int dsc[95][3]);
-  void drawText(int x, int y, const char *str, uint8_t color, const char fd[], const int dsc[95][3]);
+  void drawText(int x, int y, const char *str, const char fd[], const int dsc[95][3]);
 
+  //draw text pixel including 0 value
+  void _setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color);
+  void _drawChar(int x, int y, char ch, uint8_t color, const char fd[], const int dsc[95][3]);
+  void drawText(int x, int y, const char *str, uint8_t color, const char fd[], const int dsc[95][3]);
 
   unsigned char RAM[1024];
   uint16_t width;
