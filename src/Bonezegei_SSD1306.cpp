@@ -70,14 +70,17 @@ void Bonezegei_SSD1306::draw() {
 
 void Bonezegei_SSD1306::drawPixel(uint8_t x, uint8_t y, uint8_t pixel) {
   int iY = (y / 8);  //index Y
+  int shift = (y - (iY * 8));
   int index = x + (iY * width);
   unsigned char tmp = 0;
+
   if (pixel) {
-    tmp = RAM[index] | (1 << (y - (iY * 8)));
+    tmp = RAM[index] | (1 << shift);
+
   } else {
     unsigned char t = 0;
-    t |= (1 << (y - (iY * 8)));
-    tmp = RAM[index] & (!t);
+    t = (1 << shift);
+    tmp = RAM[index] & ~t;
   }
   RAM[index] = tmp;
 }
@@ -118,7 +121,7 @@ void Bonezegei_SSD1306::drawFilledRectangle(uint8_t x1, uint8_t y1, uint8_t x2, 
 void Bonezegei_SSD1306::setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color) {
   int b = 0;
   for (int a = 7; a > (7 - bits); a--) {
-    if (ch & (1 << a))drawPixel(x + b, y, color);
+    if (ch & (1 << a)) drawPixel(x + b, y, color);
     b++;
   }
 }
@@ -146,12 +149,54 @@ void Bonezegei_SSD1306::drawChar(int x, int y, char ch, uint8_t color, const cha
   xRun += dsc[b][0] + 2;
 }
 
-void Bonezegei_SSD1306::drawText(int x, int y, const char *str, uint8_t color, const char fd[], const int dsc[95][3]) {
+void Bonezegei_SSD1306::drawText(int x, int y, const char *str, const char fd[], const int dsc[95][3]) {
   xRun = x;
   yRun = y;
   while (*str) {
-    drawChar(x, y, *str, color, fd, dsc);
+    drawChar(x, y, *str, 1, fd, dsc);
     str += 1;
   }
 }
 
+
+
+void Bonezegei_SSD1306::_setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color) {
+  int b = 0;
+  for (int a = 7; a > (7 - bits); a--) {
+    if (ch & (1 << a))drawPixel(x + b, y,color);
+    else drawPixel(x + b, y, ~color);
+    b++;
+  }
+}
+
+void Bonezegei_SSD1306::_drawChar(int x, int y, char ch, uint8_t color, const char fd[], const int dsc[95][3]) {
+  int b = ch - 32;
+  int xLimit = width;
+  //int yLimit = 240;
+
+  if (xRun >= (xLimit - 8)) {
+    xRun = 0;
+    yRun += dsc[b][1] + 2;
+  }
+
+  if (dsc[b][0] <= 8) {
+    for (int a = 0; a < dsc[b][1]; a++) {
+      _setChar8(xRun, yRun + a, fd[(dsc[b][2] + a)], dsc[b][0], color);
+    }
+  } else {
+    for (int a = 0; a < (dsc[b][1] * 2); a++) {
+      if ((a % 2) == 0) _setChar8(xRun, yRun + (a / 2), fd[(dsc[b][2] + a)], 8, color);
+      else _setChar8(xRun + 8, yRun + (a / 2), fd[(dsc[b][2] + a)], dsc[b][0] - 7, color);
+    }
+  }
+  xRun += dsc[b][0] + 2;
+}
+
+void Bonezegei_SSD1306::drawText(int x, int y, const char *str, uint8_t color, const char fd[], const int dsc[95][3]) {
+  xRun = x;
+  yRun = y;
+  while (*str) {
+    _drawChar(x, y, *str, color, fd, dsc);
+    str += 1;
+  }
+}
