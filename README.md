@@ -1,5 +1,5 @@
 # Bonezegei_SSD1306
-128x64 Oled Driver 
+Bonezegei SSD1306 is an Arduino library that allows users to easily interface with 128x64 OLED displays. The library provides functions for drawing text and some basic shapes. The library supports both I2C communication protocol, and is compatible with various Arduino boards and shields. Bonezegei SSD1306 aims to offer a simple and efficient way to create interactive and dynamic user interfaces for microcontroller based projects. Follow the installation steps at https://bonezegei.com on how to install bonezegei libraries on Arduino IDE (Batutay, 2023).
 
   <h4>Disclaimer</h4>
   <p>The code and libraries provided by Bonezegei is intended for informational and educational purposes only. Bonezegei does not own or manufacture the hardware associated with the code. The code is provided "as is" without any warranty, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall Bonezegei be liable for any claim, damages, or other liability arising from the use of the code or the hardware. Users are solely responsible for ensuring that their use of the code complies with all applicable laws and regulations.</p>
