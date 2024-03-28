@@ -2,6 +2,7 @@
   This Library is written for OLED Display
   Author: Bonezegei (Jofel Batutay)
   Date: August 2023 
+  Updated: March 2024
 */
 #include "Bonezegei_SSD1306.h"
 
@@ -16,6 +17,12 @@ Bonezegei_SSD1306::Bonezegei_SSD1306(int w, int h) {
 }
 
 void Bonezegei_SSD1306::begin() {
+  Font_Arial8 = Bonezegei_Font(arial_8ptBitmaps, arial_8ptDescriptors);
+  Font_Arial10 = Bonezegei_Font(arial_10ptBitmaps, arial_10ptDescriptors);
+  Font_Arial12 = Bonezegei_Font(arial_12ptBitmaps, arial_12ptDescriptors);
+  Font_Arial14 = Bonezegei_Font(arial_14ptBitmaps, arial_14ptDescriptors);
+
+
   Wire.begin();
   Wire.setClock(3000000);
   sendCommand(0x40);
@@ -158,12 +165,20 @@ void Bonezegei_SSD1306::drawText(int x, int y, const char *str, const char fd[],
   }
 }
 
+void Bonezegei_SSD1306::drawText(int x, int y, const char *str, Bonezegei_Font fnt) {
+  xRun = x;
+  yRun = y;
+  while (*str) {
+    drawChar(x, y, *str, 1, fnt._font_array, fnt._font_desc);
+    str += 1;
+  }
+}
 
 
 void Bonezegei_SSD1306::_setChar8(uint8_t x, uint8_t y, char ch, int bits, uint8_t color) {
   int b = 0;
   for (int a = 7; a > (7 - bits); a--) {
-    if (ch & (1 << a))drawPixel(x + b, y,color);
+    if (ch & (1 << a)) drawPixel(x + b, y, color);
     else drawPixel(x + b, y, ~color);
     b++;
   }
