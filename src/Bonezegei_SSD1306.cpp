@@ -2,7 +2,6 @@
   This Library is written for OLED Display
   Author: Bonezegei (Jofel Batutay)
   Date: August 2023 
-  Updated: March 2024
 */
 #include "Bonezegei_SSD1306.h"
 
@@ -142,15 +141,29 @@ void Bonezegei_SSD1306::drawChar(int x, int y, char ch, uint8_t color, const cha
     xRun = 0;
     yRun += dsc[b][1] + 2;
   }
-
+  int c = 0;
   if (dsc[b][0] <= 8) {
     for (int a = 0; a < dsc[b][1]; a++) {
       setChar8(xRun, yRun + a, fd[(dsc[b][2] + a)], dsc[b][0], color);
     }
-  } else {
+  } else if ((dsc[b][0] > 8) && (dsc[b][0] <= 16)) {
     for (int a = 0; a < (dsc[b][1] * 2); a++) {
       if ((a % 2) == 0) setChar8(xRun, yRun + (a / 2), fd[(dsc[b][2] + a)], 8, color);
       else setChar8(xRun + 8, yRun + (a / 2), fd[(dsc[b][2] + a)], dsc[b][0] - 7, color);
+    }
+  } else {
+    for (int a = 0; a < (dsc[b][1] * 3); a++) {
+      if (c == 0) {
+        setChar8(xRun, yRun + (a / 3), fd[(dsc[b][2] + a)], dsc[b][0] - 7, color);
+      } else if (c == 1) {
+        setChar8(xRun + 8, yRun + (a / 3), fd[(dsc[b][2] + a)], 8, color);
+      } else if (c == 2) {
+        setChar8(xRun + 16, yRun + (a / 3), fd[(dsc[b][2] + a)], 16, color);
+      }
+      c++;
+      if (c >= 3) {
+        c = 0;
+      }
     }
   }
   xRun += dsc[b][0] + 2;
