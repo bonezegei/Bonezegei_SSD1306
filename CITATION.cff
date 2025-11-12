@@ -1,0 +1,11 @@
+cff-version: 1.1.0
+message: "If you use this library, please cite it as below."
+title: "Bonezegei SSD1306: Arduino Library for 128x64 OLED Display"
+authors:
+  - family-names: "Batutay"
+    given-names: "Jofel"
+    orcid: "https://orcid.org/0009-0007-1467-1947"
+version: ""
+doi: "10.13140/RG.2.2.13909.60648"
+date-released: 2023-10-27
+url: "https://github.com/bonezegei/Bonezegei_SSD1306"
